@@ -32,10 +32,11 @@ diff --git a/Create.c b/Create.c
 index 4acda30c..bbe9e13d 100644
 --- a/Create.c
 +++ b/Create.c
-@@ -26,6 +26,10 @@
+@@ -26,6 +26,11 @@
  #include	"md_u.h"
  #include	"md_p.h"
  #include	<ctype.h>
++#include	<linux/falloc.h>
 +#include	<fcntl.h>
 +#include	<signal.h>
 +#include	<sys/signalfd.h>
@@ -43,7 +44,7 @@ index 4acda30c..bbe9e13d 100644
  
  static int round_size_and_verify(unsigned long long *size, int chunk)
  {
-@@ -91,9 +95,149 @@ int default_layout(struct supertype *st, int level, int verbose)
+@@ -92,9 +96,149 @@ int default_layout(struct supertype *st, int level, int verbose)
  	return layout;
  }
  
@@ -194,7 +195,7 @@ index 4acda30c..bbe9e13d 100644
  {
  	dev_t rdev;
  	int fd;
-@@ -148,6 +292,14 @@ static int add_disk_to_super(int mdfd, struct shape *s, struct context *c,
+@@ -149,6 +293,14 @@ static int add_disk_to_super(int mdfd, struct shape *s, struct context *c,
  	}
  	st->ss->getinfo_super(st, info, NULL);
  
@@ -209,7 +210,7 @@ index 4acda30c..bbe9e13d 100644
  	if (have_container && c->verbose > 0)
  		pr_err("Using %s for device %d\n",
  		       map_dev(info->disk.major, info->disk.minor, 0),
-@@ -224,10 +376,23 @@ static int add_disks(int mdfd, struct mdinfo *info, struct shape *s,
+@@ -225,10 +377,23 @@ static int add_disks(int mdfd, struct mdinfo *info, struct shape *s,
  {
  	struct mddev_dev *moved_disk = NULL;
  	int pass, raid_disk_num, dnum;
@@ -233,7 +234,7 @@ index 4acda30c..bbe9e13d 100644
  	infos = xmalloc(sizeof(*infos) * total_slots);
  	enable_fds(total_slots);
  	for (pass = 1; pass <= 2; pass++) {
-@@ -261,7 +426,7 @@ static int add_disks(int mdfd, struct mdinfo *info, struct shape *s,
+@@ -262,7 +427,7 @@ static int add_disks(int mdfd, struct mdinfo *info, struct shape *s,
  
  				ret = add_disk_to_super(mdfd, s, c, st, dv,
  						&infos[dnum], have_container,
@@ -242,7 +243,7 @@ index 4acda30c..bbe9e13d 100644
  				if (ret)
  					goto out;
  
-@@ -287,6 +452,10 @@ static int add_disks(int mdfd, struct mdinfo *info, struct shape *s,
+@@ -288,6 +453,10 @@ static int add_disks(int mdfd, struct mdinfo *info, struct shape *s,
  		}
  
  		if (pass == 1) {
@@ -253,7 +254,7 @@ index 4acda30c..bbe9e13d 100644
  			ret = update_metadata(mdfd, s, st, map, info,
  					      chosen_name);
  			if (ret)
-@@ -295,7 +464,10 @@ static int add_disks(int mdfd, struct mdinfo *info, struct shape *s,
+@@ -296,7 +465,10 @@ static int add_disks(int mdfd, struct mdinfo *info, struct shape *s,
  	}
  
  out:
