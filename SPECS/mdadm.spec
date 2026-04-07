@@ -4,7 +4,7 @@
 %global xsrel %{xsver}%{?xscount}%{?xshash}
 Name:        mdadm
 Version:     4.2
-Release:     %{?xsrel}.1%{?dist}
+Release:     %{?xsrel}.1~XCPNG3024.1%{?dist}
 Summary:     The mdadm program controls Linux md devices (software RAID arrays)
 URL:         http://www.kernel.org/pub/linux/utils/raid/mdadm/
 License:     GPLv2+
