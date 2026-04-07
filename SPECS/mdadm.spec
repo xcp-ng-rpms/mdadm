@@ -4,7 +4,7 @@
 %global xsrel %{xsver}%{?xscount}%{?xshash}
 Name:        mdadm
 Version:     4.2
-Release:     %{?xsrel}%{?dist}
+Release:     %{?xsrel}.1%{?dist}
 Summary:     The mdadm program controls Linux md devices (software RAID arrays)
 URL:         http://www.kernel.org/pub/linux/utils/raid/mdadm/
 License:     GPLv2+
@@ -205,6 +205,9 @@ install -d -m 0710 %{buildroot}/run/%{name}/
 /usr/share/mdadm/mdcheck
 
 %changelog
+* Tue Apr 07 2026 Philippe Coval <philippe.coval@vates.tech> - 4.2-5.1
+- Rebuild (for blktap's trigger scriptlet)
+
 * Thu Jun 19 2025 Gerald Elder-Vass <gerald.elder-vass@cloud.com> - 4.2-5
 - Disable rpmlint hardcoded path checks
 
